@@ -34,7 +34,7 @@ class SocketConnect {
 
             connection.on('message', function (event) {
                 let message = JSON.parse(event.utf8Data);
-                console.log(message);
+                // console.log(message);
                 callback(null, {type:"msg", data: message});
             })
         })
