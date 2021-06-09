@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise')
+const mysql = require('mysql2/promise');
 
 class MySql {
     constructor() {
@@ -6,35 +6,24 @@ class MySql {
     }
 
     async connection() {
-        this.con = await mysql.createConnection({
-            host: '211.253.11.175',
-            user: 'root',
-            password: 'newdb!@#$ ',
-            port: '3306',
-            database: 'search'
+        this.con = await mysql.createPool({
+            host: process.env.NTRY_DATABASE_HOST,
+            user: process.env.NTRY_DATABASE_USERNAME,
+            password: process.env.NTRY_DATABASE_PASSWORD,
+            port: process.env.NTRY_DATABASE_PORT,
+            database: process.env.NTRY_DATABASE_NAME
         })
     }
 
-    async getPlayerInfo(player_id) {
+    async getCoinData() {
         if (!this.con) await this.connection()
-        // important part: execute method
-        const query_result = await this.con.execute('select * from sr_players where id = ? ', [player_id])
-        return query_result[0][0]
+        const query_result = await this.con.query('select * from bitcoin_price_collection');
+        return query_result[0][0];
     }
 
 }
 
 module.exports = MySql
-
-
-// using methods
-let db = new MySql()
-db.getPlayerInfo('sr:player:1021641').then(data => {
-    console.log(data)
-}).catch(err => {
-    console.log(err.message)
-})
-
 
 
 

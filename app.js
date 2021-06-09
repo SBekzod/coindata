@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 app.use('/', function(req, res) {
-    res.end('server is active');
+    res.end('connection succeed');
 });
 
 module.exports = app;

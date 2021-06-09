@@ -27,14 +27,12 @@ class SocketConnect {
             })
 
             connection.on('close', function (data) {
-                console.log(data)
                 console.log('echo-protocol Connection Closed');
                 callback(null, {type:"close", data: data});
             })
 
             connection.on('message', function (event) {
                 let message = JSON.parse(event.utf8Data);
-                // console.log(message);
                 callback(null, {type:"msg", data: message});
             })
         })
