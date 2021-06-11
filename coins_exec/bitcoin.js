@@ -20,8 +20,8 @@ bitcoin_ws.collect(async (err, response) => {
 
 
 function ticksRecord(data) {
-    const current_time = moment().utc().set('millisecond', 0).format("YYYY-MM-DD hh:mm:ss");
-    const tick_obj = {pairs: data['s'], time: current_time, data: data};
+    const current_time = moment(data['E']).utc().format("YYYY-MM-DD hh:mm:ss");
+    const tick_obj = {pairs: data['s'], col_time: current_time, data: data};
     console.log('TICKER: ', tick_obj);
     db.insertCoinData(tick_obj).then((data) => {
         console.log('result: ', data);

@@ -24,37 +24,33 @@ class MySql {
     async insertCoinData(ticker) {
         try {
             if (!this.con) await this.connection();
-            let table = '';
-            switch(ticker.pairs) {
+            let prefix = '';
+            switch (ticker.pairs) {
                 case 'BTCBUSD':
-                    table = 'bitcoin_tick_collection';
+                    prefix = 'bitcoin';
                     break;
                 case 'ETHBUSD':
-                    table = 'ethereum_tick_collection';
+                    prefix = 'ethereum';
                     break;
                 case 'BNBBUSD':
-                    table = 'binance_tick_collection';
+                    prefix = 'binance';
                     break;
                 case 'ADABUSD':
-                    table = 'cardano_tick_collection';
+                    prefix = 'cardano';
                     break;
                 case 'DOGEBUSD':
-                    table = 'doge_tick_collection';
+                    prefix = 'doge';
                     break;
                 default:
                     throw new Error('unplanned pairs');
                     break;
             }
 
-            if(table === 'bitcoin_tick_collection') {
-                let sql = 'INSERT INTO bitcoin_tick_collection SET binstamp = ?, coltime = ?, close = ?, open = ?, high=?, low = ?, volume =?'
-                const query_result = await this.con.query(sql, [ticker.data['E'], ticker.time, ticker.data['c'], ticker.data['o'], ticker.data['h'], ticker.data['l'], ticker.data['v']]);
-                return query_result[0][0];
-            } else {
-                return ticker.pairs;
-            }
+            let sql = `INSERT INTO ${prefix}_tick_collection SET binstamp = ?, coltime = ?, close = ?, open = ?, high=?, low = ?, volume =?`;
+            const query_result = await this.con.query(sql, [ticker.data['E'], ticker.col_time, ticker.data['c'], ticker.data['o'], ticker.data['h'], ticker.data['l'], ticker.data['v']]);
+            return true;
 
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
 
