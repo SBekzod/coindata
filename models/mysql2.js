@@ -11,7 +11,9 @@ class MySql {
             user: process.env.NTRY_DATABASE_USERNAME,
             password: process.env.NTRY_DATABASE_PASSWORD,
             port: process.env.NTRY_DATABASE_PORT,
-            database: process.env.NTRY_DATABASE_NAME
+            database: process.env.NTRY_DATABASE_NAME,
+            waitForConnections: true,
+            queueLimit: 0,
         })
     }
 
@@ -23,7 +25,10 @@ class MySql {
 
     async insertCoinData(ticker) {
         try {
-            if (!this.con) await this.connection();
+            if (!this.con) {
+                let db = await this.connection();
+                console.log('* mysql connection established *');
+            }
             let prefix = '';
             switch (ticker.pairs) {
                 case 'BTCBUSD':
@@ -49,7 +54,6 @@ class MySql {
             let sql = `INSERT INTO ${prefix}_tick_collection SET binstamp = ?, coltime = ?, close = ?, open = ?, high=?, low = ?, volume =?`;
             const query_result = await this.con.query(sql, [ticker.data['E'], ticker.col_time, ticker.data['c'], ticker.data['o'], ticker.data['h'], ticker.data['l'], ticker.data['v']]);
             return true;
-
         } catch (err) {
             throw err;
         }
