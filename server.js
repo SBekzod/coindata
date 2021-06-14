@@ -6,14 +6,11 @@ const shell = require('shelljs');
 const dotenv = require('dotenv');
 dotenv.config({path: process.env.NODE_ENV === 'PRODUCTION' ? './.env.prod' : './.env.dev'});
 
-// bitcoin
+// BITCOIN and OTHERS
 setTimeout(() => shell.exec('node coins_exec/bitcoin.js', {async: true}), 5000);
 
-// etherium
-// setTimeout(() => shell.exec('node coins_exec/etherium.js'), 10000);
-
-// doge
-// setTimeout(() => shell.exec('node coins_exec/doge.js'), 15000);
+// OTHER PAIRS: ethereum, binance, cardano and doge
+// setTimeout(() => shell.exec('node coins_exec/others_coins.js', {async: true}), 10000);
 
 
 // EXPRESS SERVER CONNECTION
