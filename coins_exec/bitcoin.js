@@ -6,7 +6,7 @@ const db = new MySql();
 // Connection to binance websocket connection to collect BITCOIN data
 let bitcoin_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=btcbusd@ticker");
 // Connection to binance websocket connection to collect other four coins data
-let coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/bnbbusd@ticker/adabusd@ticker/dogebusd@ticker");
+let coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker");
 
 
 let period_btc = moment.utc().format("YYYY-MM-DD hh:mm:ss");
@@ -17,12 +17,12 @@ setInterval(function() {
         bitcoin_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=btcbusd@ticker");
     } else if(period_others < moment.utc().add( -10, 'seconds').format("YYYY-MM-DD hh:mm:ss")) {
         period_others = moment.utc().format("YYYY-MM-DD hh:mm:ss");
-        coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/bnbbusd@ticker/adabusd@ticker/dogebusd@ticker");
+        coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker");
     } else {
         console.log(period_btc);
         console.log('---------------------');
     }
-}, 5000);
+}, 10000);
 
 
 bitcoin_ws.collect(async (err, response) => {
