@@ -47,16 +47,16 @@ async function ticksRecord(data) {
     } catch (err) {
         console.log('ERROR: ', err);
         console.log('---------------------');
-        // double secure connection from the next insertion
-        db = new MySql();
+        // recall reconnection on db
+        db.con = null;
         return false;
     }
 }
 
 
-//TODO: NOTICE!!! BINANCE WEBSOCKET did not respond with standard echo-protocol codes
+//TODO: NOTICE!!! BINANCE FREE WEBSOCKET did not respond with standard echo-protocol codes
 // and neither with close or error messages after primary connection
-// solution: handling with close and push reconnection of web sockets manually
+// customized solution: handling with socket muted state
 setInterval(function () {
     try {
         console.log(`☄ checker ${moment.utc().format("YYYY-MM-DD hh:mm:ss")} main:${period_btc} others:${period_others} ☄`);

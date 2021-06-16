@@ -60,6 +60,18 @@ class MySql {
 
     }
 
+    async insertCaseConnection(data) {
+        try {
+            if (!this.con) await this.connection();
+            let sql = `INSERT INTO ticker_info_cases SET category = ?, case_time_utc = ?, coin_type = ?, timer = ?`;
+            await this.con.query(sql, [data.issue, data.case_time, data.coin_type, data.timer]);
+            return true;
+        } catch (err) {
+            return false;
+        }
+
+    }
+
 }
 
 module.exports = MySql
