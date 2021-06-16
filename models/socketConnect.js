@@ -13,6 +13,12 @@ class SocketConnect {
         let client = new WebSocketClient();
         client.connect(this.url);
 
+        // customized checking data receipt
+        let timer = 0;
+        let computing = setInterval(() => {
+            timer++;
+        }, 1000);
+
         client.on('connectFailed', (error) => {
             console.log('Connect Error: ' + error);
             callback(error, null);
@@ -23,17 +29,25 @@ class SocketConnect {
 
             connection.on('error', function (error) {
                 console.log("Connection Error: " + error.toString());
-                callback(error, null);
+                callback('error in connection', null);
             })
 
             connection.on('close', function (data) {
                 console.log('echo-protocol Connection Closed');
-                callback(null, {type:"close", data: data});
+                callback('close in connection', null);
             })
 
             connection.on('message', function (event) {
-                let message = JSON.parse(event.utf8Data);
-                callback(null, {type:"msg", data: message});
+                if(timer <= 10) {
+                    timer = 0;
+                    let message = JSON.parse(event.utf8Data);
+                    callback(null, {type: "msg", data: message});
+                } else {
+                    connection.close();
+                    clearInterval(computing);
+                    callback('comets forced to close', null);
+                }
+
             })
         })
 
