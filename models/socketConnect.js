@@ -49,7 +49,7 @@ class SocketConnect {
                 setTimeout(() => {
                     if (timer >= 5) {
                         let coin_type = (message['data']['s'] === "BTCBUSD") ? 'BTC' : 'ETH/DOGE';
-                        let case_time = moment.utc().format('YYYY-MM-DD hh:mm:ss');
+                        let case_time = moment.utc().format('YYYY-MM-DD HH:mm:ss');
                         db.insertCaseConnection({
                             timer: timer,
                             coin_type: coin_type,

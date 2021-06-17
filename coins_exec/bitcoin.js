@@ -9,15 +9,14 @@ creatingPairsSocket('others');
 
 async function ticksRecord(data) {
     try {
-        const current_time = moment(data['E']).utc().format("YYYY-MM-DD hh:mm:ss");
+        const current_time = moment(data['E']).utc().format("YYYY-MM-DD HH:mm:ss");
         const tick_obj = {pairs: data['s'], col_time: current_time, data: data};
         await db.insertCoinData(tick_obj);
         return true;
     } catch (err) {
+        db.con = null;
         console.log('ERROR: ', err);
         console.log('---------------------');
-        // recall reconnection on db from next insertion
-        db.con = null;
         return false;
     }
 }
@@ -25,7 +24,7 @@ async function ticksRecord(data) {
 function creatingPairsSocket(pairs_type, isPrimary = true) {
     if(pairs_type === 'main') {
         bitcoin_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=btcbusd@ticker"),
-            period_btc = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+            period_btc = moment.utc().format("YYYY-MM-DD HH:mm:ss");
 
         bitcoin_ws.collect(async (err, response) => {
             let order = (isPrimary === false) ? 'REC:' : '';
@@ -33,13 +32,13 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
                 console.log(`${order} ${err} on ${pairs_type}`);
                 console.log('===========');
             } else {
-                period_btc = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+                period_btc = moment.utc().format("YYYY-MM-DD HH:mm:ss");
                 const data = response.data['data'];
                 if (await ticksRecord(data)) {
                     console.log(`${order} main ${response.type}, pairs: ${response.data['data']['s']} at ${period_btc}`);
                     console.log('---------------------');
                 } else {
-                    console.log(`${order} NOT UPDATED MAIN ${moment.utc().format("YYYY-MM-DD hh:mm:ss")}`);
+                    console.log(`${order} NOT UPDATED MAIN ${moment.utc().format("YYYY-MM-DD HH:mm:ss")}`);
                     console.log('---------------------');
                 }
             }
@@ -47,7 +46,7 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
 
     } else {
         coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker"),
-            period_others = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+            period_others = moment.utc().format("YYYY-MM-DD HH:mm:ss");
 
         coin_others.collect(async (err, response) => {
             let order = (isPrimary === false) ? 'REC:' : '';
@@ -55,13 +54,13 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
                 console.log(`${order} ${err} on ${pairs_type}`);
                 console.log('===========');
             } else {
-                period_others = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+                period_others = moment.utc().format("YYYY-MM-DD HH:mm:ss");
                 const data = response.data['data'];
                 if (await ticksRecord(data)) {
                     console.log(`${order} others ${response.type}, pairs: ${response.data['data']['s']} at ${period_others}`);
                     console.log('---------------------');
                 } else {
-                    console.log(`${order} NOT UPDATED OTHERS ${moment.utc().format("YYYY-MM-DD hh:mm:ss")}`);
+                    console.log(`${order} NOT UPDATED OTHERS ${moment.utc().format("YYYY-MM-DD HH:mm:ss")}`);
                     console.log('---------------------');
                 }
             }
@@ -77,18 +76,18 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
 
 setInterval(function () {
     try {
-        console.log(`☄ checker ${moment.utc().format("YYYY-MM-DD hh:mm:ss")} main:${period_btc} others:${period_others} ☄`);
+        console.log(`☄ checker ${moment.utc().format("YYYY-MM-DD HH:mm:ss")} main:${period_btc} others:${period_others} ☄`);
 
-        if (period_btc < moment.utc().add(-20, 'seconds').format("YYYY-MM-DD hh:mm:ss")) {
-            period_btc = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+        if (period_btc < moment.utc().add(-20, 'seconds').format("YYYY-MM-DD HH:mm:ss")) {
+            period_btc = moment.utc().format("YYYY-MM-DD HH:mm:ss");
             bitcoin_ws.closeSocketConnection();
             setTimeout(() => creatingPairsSocket('main', false), 1000);
         } else {
             console.log(`******* NORMAL MAIN CONNECTION: ${period_btc} *******`);
         }
 
-        if (period_others < moment.utc().add(-20, 'seconds').format("YYYY-MM-DD hh:mm:ss")) {
-            period_others = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+        if (period_others < moment.utc().add(-20, 'seconds').format("YYYY-MM-DD HH:mm:ss")) {
+            period_others = moment.utc().format("YYYY-MM-DD HH:mm:ss");
             coin_others.closeSocketConnection();
             setTimeout(() => creatingPairsSocket('others', false), 1000);
         } else {
