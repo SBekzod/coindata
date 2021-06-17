@@ -64,6 +64,8 @@ setInterval(function () {
         if (period_btc < moment.utc().add(-20, 'seconds').format("YYYY-MM-DD hh:mm:ss")) {
             console.log(`******* RECONNECT MAIN: ${period_btc} *******`);
             period_btc = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+
+            bitcoin_ws.closeSocketConnection();
             bitcoin_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=btcbusd@ticker");
             bitcoin_ws.collect(async (err, response) => {
                 if (err) {
@@ -88,6 +90,7 @@ setInterval(function () {
             console.log(`******* RECONNECT OTHERS: ${period_others} *******`);
 
             period_others = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+            coin_others.closeSocketConnection();
             coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker");
             coin_others.collect(async (err, response) => {
                 if (err) {

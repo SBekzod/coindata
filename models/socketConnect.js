@@ -8,12 +8,13 @@ class SocketConnect {
     constructor(url = 'wss://echo.websocket.org') {
         this.url = url;
         console.log('URL: ', this.url);
+        this.client = null;
     }
 
     collect(callback) {
 
-        let client = new WebSocketClient();
-        client.connect(this.url);
+        this.client = new WebSocketClient();
+        this.client.connect(this.url);
 
         // customized: checking data receipt
         let timer = 0;
@@ -21,25 +22,25 @@ class SocketConnect {
             timer++;
         }, 1000);
 
-        client.on('connectFailed', (error) => {
+        this.client.on('connectFailed', (error) => {
             console.log('Connect Error: ' + error);
             callback(error, null);
         })
 
-        client.on('connect', (connection) => {
+        this.client.on('connect', (connection) => {
             console.log('WebSocket Client Connected');
 
-            connection.on('error', function (error) {
+            connection.on('error', (error) => {
                 console.log("Connection Error: " + error.toString());
                 callback('error in connection', null);
             })
 
-            connection.on('close', function (data) {
+            connection.on('close', (data) => {
                 console.log('echo-protocol Connection Closed');
                 callback('close in connection', null);
             })
 
-            connection.on('message', function (event) {
+            connection.on('message', (event) => {
                 timer = 0;
                 let message = JSON.parse(event.utf8Data);
                 callback(null, {type: "msg", data: message});
@@ -57,7 +58,7 @@ class SocketConnect {
                         }).then(() => console.log('recorded'))
                             .catch(err => console.log(`Record error: ${err}`));
                         timer = 0;
-                        connection.close();
+                        this.closeSocketConnection();
                         clearInterval(computing);
                         callback('comets forced to close', null);
                     }
@@ -66,6 +67,11 @@ class SocketConnect {
 
         })
 
+    }
+
+    closeSocketConnection() {
+        this.client.close();
+        this.client = null;
     }
 
 }
