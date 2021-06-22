@@ -48,7 +48,7 @@ class SocketConnect {
                 // Checking whether msg is received in the next five seconds duration
                 setTimeout(() => {
                     if (timer >= 5) {
-                        let coin_type = (message['data']['s'] === "BTCBUSD") ? 'BTC' : 'ETH/DOGE';
+                        let coin_type = 'EOS';
                         let case_time = moment.utc().format('YYYY-MM-DD HH:mm:ss');
                         db.insertCaseConnection({
                             timer: timer,

@@ -29,28 +29,7 @@ class MySql {
                 let db = await this.connection();
                 console.log('* mysql connection established *');
             }
-            let prefix = '';
-            switch (ticker.pairs) {
-                case 'BTCBUSD':
-                    prefix = 'bitcoin';
-                    break;
-                case 'ETHBUSD':
-                    prefix = 'ethereum';
-                    break;
-                case 'BNBBUSD':
-                    prefix = 'binance';
-                    break;
-                case 'ADABUSD':
-                    prefix = 'cardano';
-                    break;
-                case 'DOGEBUSD':
-                    prefix = 'doge';
-                    break;
-                default:
-                    throw new Error('unplanned pairs');
-                    break;
-            }
-
+            let prefix = 'eos';
             let sql = `INSERT INTO ${prefix}_tick_collection SET binstamp = ?, coltime = ?, close = ?, open = ?, high=?, low = ?, volume =?`;
             await this.con.query(sql, [ticker.data['E'], ticker.col_time, ticker.data['c'], ticker.data['o'], ticker.data['h'], ticker.data['l'], ticker.data['v']]);
             return true;
