@@ -53,7 +53,7 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
 
 setInterval(function () {
     try {
-        console.log(`☄ checker ${moment.utc().format("YYYY-MM-DD HH:mm:ss")} main:${period_eos} others:${period_others} ☄`);
+        console.log(`☄ checker ${moment.utc().format("YYYY-MM-DD HH:mm:ss")} main:${period_eos} ☄`);
 
         if (period_eos < moment.utc().add(-30, 'seconds').format("YYYY-MM-DD HH:mm:ss")) {
             period_eos = moment.utc().format("YYYY-MM-DD HH:mm:ss");
