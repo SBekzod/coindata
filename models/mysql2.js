@@ -29,7 +29,7 @@ class MySql {
                 let db = await this.connection();
                 console.log('* mysql connection established *');
             }
-            let prefix = 'eos';
+            let prefix = 'bnb';
             let sql = `INSERT INTO ${prefix}_tick_collection SET binstamp = ?, coltime = ?, close = ?, open = ?, high=?, low = ?, volume =?`;
             await this.con.query(sql, [ticker.data['E'], ticker.col_time, ticker.data['c'], ticker.data['o'], ticker.data['h'], ticker.data['l'], ticker.data['v']]);
             return true;

@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config({path: process.env.NODE_ENV === 'PRODUCTION' ? './.env.prod' : './.env.dev'});
 
 // EOS
-setTimeout(() => shell.exec('node coins_exec/eoscoin.js', {async: true}), 5000);
+setTimeout(() => shell.exec('node coins_exec/bnbcoin.js', {async: true}), 5000);
 
 
 

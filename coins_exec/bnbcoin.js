@@ -22,7 +22,7 @@ async function ticksRecord(data) {
 
 function creatingPairsSocket(pairs_type, isPrimary = true) {
     if(pairs_type === 'main') {
-        eos_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=eosbusd@ticker"),
+        eos_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=bnbbusd@ticker"),
             period_eos = moment.utc().format("YYYY-MM-DD HH:mm:ss");
 
         eos_ws.collect(async (err, response) => {
