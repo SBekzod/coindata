@@ -22,7 +22,7 @@ async function ticksRecord(data) {
 }
 
 function creatingPairsSocket(pairs_type, isPrimary = true) {
-    if(pairs_type === 'main') {
+    if (pairs_type === 'main') {
         bitcoin_ws = new SocketConnect("wss://stream.binance.com:9443/stream?streams=btcbusd@ticker"),
             period_btc = moment.utc().format("YYYY-MM-DD HH:mm:ss");
 
@@ -45,7 +45,8 @@ function creatingPairsSocket(pairs_type, isPrimary = true) {
         });
 
     } else {
-        coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker"),
+        // coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker/dogebusd@ticker"),
+        coin_others = new SocketConnect("wss://stream.binance.com:9443/stream?streams=ethbusd@ticker"),
             period_others = moment.utc().format("YYYY-MM-DD HH:mm:ss");
 
         coin_others.collect(async (err, response) => {

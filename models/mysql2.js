@@ -37,15 +37,6 @@ class MySql {
                 case 'ETHBUSD':
                     prefix = 'ethereum';
                     break;
-                case 'BNBBUSD':
-                    prefix = 'binance';
-                    break;
-                case 'ADABUSD':
-                    prefix = 'cardano';
-                    break;
-                case 'DOGEBUSD':
-                    prefix = 'doge';
-                    break;
                 default:
                     throw new Error('unplanned pairs');
                     break;
